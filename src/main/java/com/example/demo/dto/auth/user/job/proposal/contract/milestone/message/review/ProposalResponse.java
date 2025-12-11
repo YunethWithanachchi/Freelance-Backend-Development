@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 public class ProposalResponse {
-
+    
+//view proposal
     private String id;
     private String jobId;
     private String freelancerId;

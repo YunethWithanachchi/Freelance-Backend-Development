@@ -3,7 +3,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class ProposalRequest {
-
+//submit proposal 
     @NotBlank(message = "Job ID is required")
     private String jobId;
 
