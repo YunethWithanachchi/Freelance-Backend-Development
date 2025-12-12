@@ -28,8 +28,17 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig)throws Exception{
-        return authConfig.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(
+        HttpSecurity http,
+        PasswordEncoder passwordEncoder,
+        CustomUserDetailsService userDetailsService) throws Exception{
+
+        AuthenticationManagerBuilder authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authBuilder
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder);
+        return authBuilder.build();
+
     }
 /*    @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception{
@@ -41,14 +50,14 @@ public class SecurityConfig {
     }*/
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http,AuthenticationManager authenticationManager) throws Exception {
         http
                 .csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->auth
                 .requestMatchers("/api/auth/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
                 )
-                .userDetailsService(userDetailsService)
+                .authenticationManager(authenticationManager)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
