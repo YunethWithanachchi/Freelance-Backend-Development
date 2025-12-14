@@ -19,6 +19,6 @@ public class Proposal {
 
     private String coverLetter;
     private Double amount;
-
+    private String status;
     private String createdAt;
 }
